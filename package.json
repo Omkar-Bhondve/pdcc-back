@@ -1,0 +1,76 @@
+{
+  "name": "exnj5",
+  "version": "1.0.1",
+  "description": "Production-ready Express.js backend boilerplate with RBAC, security, caching, and best practices built-in",
+  "main": "src/index.js",
+  "bin": {
+    "exnj5": "bin/cli.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --coverage",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "test:integration": "jest --testPathPattern=tests/integration",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "generate:postman": "node src/utils/generateCollection.js"
+  },
+  "keywords": [
+    "express",
+    "backend",
+    "production",
+    "boilerplate",
+    "starter",
+    "rbac",
+    "jwt",
+    "security",
+    "postgresql",
+    "enterprise",
+    "scalable"
+  ],
+  "author": "Production Backend Team",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.44",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.3",
+        "response-time": "^2.3.2",
+        "sharp": "^0.33.1",
+    "systeminformation": "^5.21.20",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "eslint": "^8.55.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yashnevase/express-production-starter.git"
+  },
+  "homepage": "https://github.com/yashnevase/express-production-starter#readme",
+  "bugs": {
+    "url": "https://github.com/yashnevase/express-production-starter/issues"
+  }
+}

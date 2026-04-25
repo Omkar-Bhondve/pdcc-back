@@ -1,0 +1,1 @@
+import{j as t}from"./index-B4TIuAp4.js";import"./router-CP5LiXuy.js";import{D as r}from"./DepartmentForm-GCaC3PFP.js";import"./vendor-DlBnNAMw.js";import"./StandardForm-CEmXUVrM.js";import"./arrow-left-B4Lm865L.js";import"./Switch-CwrY5jHi.js";import"./master.service-vrR8K2zb.js";const n=()=>t.jsx(r,{isEdit:!1,isView:!1});export{n as default};
