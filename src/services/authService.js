@@ -117,6 +117,10 @@ const login = async (email, password) => {
 };
 
 const refreshTokens = async (refreshToken) => {
+  if (!refreshToken) {
+    throw ApiError.unauthorized('Refresh token is required');
+  }
+
   const payload = verifyRefreshToken(refreshToken);
   if (!payload) {
     throw ApiError.unauthorized('Invalid or expired refresh token');

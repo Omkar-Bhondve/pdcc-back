@@ -14,6 +14,8 @@ router.use('/admin/users', require('./users'));
 router.use('/admin/roles', require('./roles'));
 router.use('/admin/permissions', require('./permissions'));
 router.use('/admin/masters', require('./masters'));
+router.use('/admin/work', require('./work'));
+router.use('/admin/contractor', require('./contractor'));
 router.use('/admin/logs', require('./logs'));
 
 router.get('/admin/dashboard',

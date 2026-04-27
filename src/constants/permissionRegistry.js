@@ -92,6 +92,55 @@ const PERMISSION_REGISTRY = {
     permission_name: 'View dashboard',
     module: 'dashboard',
     description: 'Permission to view admin dashboard'
+  },
+  
+  // Work module
+  'work.view': {
+    permission_name: 'View work',
+    module: 'work',
+    description: 'Permission to view work list and details'
+  },
+  'work.create': {
+    permission_name: 'Create work',
+    module: 'work',
+    description: 'Permission to create new work'
+  },
+  'work.edit': {
+    permission_name: 'Edit work',
+    module: 'work',
+    description: 'Permission to edit work information'
+  },
+  'work.delete': {
+    permission_name: 'Delete work',
+    module: 'work',
+    description: 'Permission to delete work'
+  },
+  
+  // Contractor module
+  'contractor.view': {
+    permission_name: 'View contractors',
+    module: 'contractor',
+    description: 'Permission to view contractor list and details'
+  },
+  'contractor.create': {
+    permission_name: 'Create contractors',
+    module: 'contractor',
+    description: 'Permission to create new contractors'
+  },
+  'contractor.edit': {
+    permission_name: 'Edit contractors',
+    module: 'contractor',
+    description: 'Permission to edit contractor information'
+  },
+  'contractor.delete': {
+    permission_name: 'Delete contractors',
+    module: 'contractor',
+    description: 'Permission to delete contractors'
+  },
+  'contractor.send_email': {
+    permission_name: 'Send email to contractors',
+    module: 'contractor',
+    description: 'Permission to send emails to contractors'
   }
 };
 

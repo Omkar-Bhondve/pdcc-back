@@ -59,7 +59,7 @@ const csrfProtection = (req, res, next) => {
   }
   
   // Skip CSRF for auth endpoints (they have their own protection)
-  if (req.path.startsWith('/auth/')) {
+  if (req.path.startsWith('/auth/') || req.path.startsWith('/api/auth/')) {
     return next();
   }
   
