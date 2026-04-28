@@ -9,7 +9,7 @@ const { authenticateToken, requirePermission } = require('../middleware/auth');
 const { customValidators } = require('../utils/validators');
 
 const createWorkSchema = Joi.object({
-  work_name: Joi.string().min(2).max(255).required().label('Work name')
+  work_name: Joi.string().min(2).max(255).optional().label('Work name')
 });
 
 const updateWorkSchema = Joi.object({

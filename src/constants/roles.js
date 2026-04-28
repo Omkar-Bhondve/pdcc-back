@@ -6,7 +6,8 @@ const ROLE_NAMES = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN', 
   MANAGER: 'MANAGER',
-  USER: 'USER'
+  USER: 'USER',
+  CONTRACTOR: 'CONTRACTOR'
 };
 
 // Role display names (for UI)
@@ -14,7 +15,8 @@ const ROLE_DISPLAY_NAMES = {
   [ROLE_NAMES.SUPER_ADMIN]: 'Super Admin',
   [ROLE_NAMES.ADMIN]: 'Administrator',
   [ROLE_NAMES.MANAGER]: 'Manager',
-  [ROLE_NAMES.USER]: 'User'
+  [ROLE_NAMES.USER]: 'User',
+  [ROLE_NAMES.CONTRACTOR]: 'Contractor'
 };
 
 // Role hierarchy (higher number = higher privilege)
@@ -22,7 +24,8 @@ const ROLE_HIERARCHY = {
   [ROLE_NAMES.SUPER_ADMIN]: 4,
   [ROLE_NAMES.ADMIN]: 3,
   [ROLE_NAMES.MANAGER]: 2,
-  [ROLE_NAMES.USER]: 1
+  [ROLE_NAMES.USER]: 1,
+  [ROLE_NAMES.CONTRACTOR]: 1
 };
 
 // Role descriptions
@@ -30,7 +33,8 @@ const ROLE_DESCRIPTIONS = {
   [ROLE_NAMES.SUPER_ADMIN]: 'Full system access with all permissions',
   [ROLE_NAMES.ADMIN]: 'Administrative access to most system features',
   [ROLE_NAMES.MANAGER]: 'Management access to assigned modules and teams',
-  [ROLE_NAMES.USER]: 'Basic access to permitted features'
+  [ROLE_NAMES.USER]: 'Basic access to permitted features',
+  [ROLE_NAMES.CONTRACTOR]: 'Contractor access to assigned work and contracts'
 };
 
 // Role colors for UI (optional)
@@ -38,7 +42,8 @@ const ROLE_COLORS = {
   [ROLE_NAMES.SUPER_ADMIN]: '#dc2626', // red
   [ROLE_NAMES.ADMIN]: '#f59e0b',     // amber
   [ROLE_NAMES.MANAGER]: '#10b981',   // emerald
-  [ROLE_NAMES.USER]: '#3b82f6'      // blue
+  [ROLE_NAMES.USER]: '#3b82f6',      // blue
+  [ROLE_NAMES.CONTRACTOR]: '#8b5cf6'  // purple
 };
 
 // Helper functions

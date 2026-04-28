@@ -245,9 +245,9 @@ const sendCredentialsEmail = async (contractorId, userId) => {
     throw ApiError.badRequest('Contractor does not have an email address');
   }
 
-  if (!contractorData.role_id) {
-    throw ApiError.badRequest('Please assign a role to the contractor before sending credentials');
-  }
+  // if (!contractorData.role_id) {
+  //   throw ApiError.badRequest('Please assign a role to the contractor before sending credentials');
+  // }
 
   if (contractorData.email_sent) {
     throw ApiError.badRequest('Credentials have already been sent to this contractor');

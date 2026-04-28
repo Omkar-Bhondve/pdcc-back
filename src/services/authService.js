@@ -81,12 +81,39 @@ const register = async (userData) => {
 };
 
 const login = async (email, password) => {
-  const result = await query(
+  // First check in users table
+  const userResult = await query(
     'SELECT user_id, email, password_hash, full_name, role_id, is_active, email_verified FROM iwms_users WHERE email = $1 AND deleted_at IS NULL',
     [email]
   );
 
-  const user = result.rows[0];
+  let user = userResult.rows[0];
+
+  // If not found in users table, check contractors table
+  if (!user) {
+    const contractorResult = await query(
+      `SELECT contractor_id as user_id, email, password_hash, 
+              COALESCE(majur_society_name, sube_first_name || ' ' || sube_last_name, sube_first_name, 'Contractor') as full_name,
+              role_id, status as is_active, email_sent as email_verified 
+       FROM iwms_contractor 
+       WHERE email = $1 AND deleted_at IS NULL`,
+      [email]
+    );
+
+    user = contractorResult.rows[0];
+    
+    if (user) {
+      // Ensure contractor has a role, default to CONTRACTOR role if not set
+      if (!user.role_id) {
+        const contractorRoleResult = await query('SELECT role_id FROM iwms_roles WHERE role_name = $1', ['CONTRACTOR']);
+        if (contractorRoleResult.rows[0]) {
+          user.role_id = contractorRoleResult.rows[0].role_id;
+        }
+      }
+    }
+  }
+
+  // If still not found, throw error
   if (!user) {
     throw ApiError.unauthorized('User not found or inactive');
   }
@@ -100,7 +127,12 @@ const login = async (email, password) => {
     throw ApiError.unauthorized('Invalid credentials');
   }
 
-  await query('UPDATE iwms_users SET last_login_at = NOW(), updated_at = NOW() WHERE user_id = $1', [user.user_id]);
+  // Update last login based on table type
+  if (userResult.rows[0]) {
+    await query('UPDATE iwms_users SET last_login_at = NOW(), updated_at = NOW() WHERE user_id = $1', [user.user_id]);
+  } else {
+    await query('UPDATE iwms_contractor SET updated_at = NOW() WHERE contractor_id = $1', [user.user_id]);
+  }
 
   const roleResult = await query('SELECT role_name FROM iwms_roles WHERE role_id = $1', [user.role_id]);
   user.role_name = roleResult.rows[0]?.role_name || 'USER';
@@ -126,6 +158,7 @@ const refreshTokens = async (refreshToken) => {
     throw ApiError.unauthorized('Invalid or expired refresh token');
   }
 
+  // First check in users table
   const userResult = await query(
     `SELECT u.*, r.role_name
      FROM iwms_users u
@@ -134,7 +167,24 @@ const refreshTokens = async (refreshToken) => {
     [payload.user_id]
   );
 
-  const user = userResult.rows[0];
+  let user = userResult.rows[0];
+
+  // If not found in users, check contractors
+  if (!user) {
+    const contractorResult = await query(
+      `SELECT c.contractor_id as user_id, c.email, c.password_hash, 
+              COALESCE(c.majur_society_name, c.sube_first_name || ' ' || c.sube_last_name, c.sube_first_name, 'Contractor') as full_name, 
+              c.role_id, c.status as is_active, 
+              c.email_sent as email_verified, r.role_name
+       FROM iwms_contractor c
+       JOIN iwms_roles r ON r.role_id = c.role_id
+       WHERE c.contractor_id = $1 AND c.status = 'active' AND c.deleted_at IS NULL`,
+      [payload.user_id]
+    );
+
+    user = contractorResult.rows[0];
+  }
+
   if (!user) {
     throw ApiError.unauthorized('User not found or inactive');
   }
