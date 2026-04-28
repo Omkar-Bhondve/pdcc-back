@@ -16,11 +16,12 @@ node_modules/
 # dist/
 # dist-ssr/
 # *.local
+database/
 
 # --------------------
 # Environment files
 # --------------------
-# .env
+.env
 # .env.*
 # .env.example
 
