@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS iwms_contractor (
     -- Authentication fields
     email VARCHAR(255),
     password_hash VARCHAR(255),
-    role_id INTEGER REFERENCES iwms_roles(role_id),
+    password_reset_token VARCHAR(255),
+    password_reset_token_expires_at TIMESTAMP NULL,
     email_sent BOOLEAN DEFAULT FALSE,
     email_sent_at TIMESTAMP NULL,
     
@@ -71,11 +72,18 @@ CREATE TABLE IF NOT EXISTS iwms_contractor (
     deleted_by INTEGER REFERENCES iwms_users(user_id)
 );
 
+-- Remove legacy per-contractor role storage from existing databases
+DROP INDEX IF EXISTS idx_iwms_contractor_role_id;
+ALTER TABLE iwms_contractor DROP COLUMN IF EXISTS role_id;
+
+-- Add password reset support for existing contractor tables
+ALTER TABLE iwms_contractor ADD COLUMN IF NOT EXISTS password_reset_token VARCHAR(255);
+ALTER TABLE iwms_contractor ADD COLUMN IF NOT EXISTS password_reset_token_expires_at TIMESTAMP NULL;
+
 -- Create indexes for faster lookups
 CREATE INDEX IF NOT EXISTS idx_iwms_contractor_type ON iwms_contractor(contractor_type);
 CREATE INDEX IF NOT EXISTS idx_iwms_contractor_status ON iwms_contractor(status);
 CREATE INDEX IF NOT EXISTS idx_iwms_contractor_email ON iwms_contractor(email);
-CREATE INDEX IF NOT EXISTS idx_iwms_contractor_role_id ON iwms_contractor(role_id);
 CREATE INDEX IF NOT EXISTS idx_iwms_contractor_email_sent ON iwms_contractor(email_sent);
 
 -- Create trigger to automatically update updated_at timestamp
