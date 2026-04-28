@@ -10,19 +10,31 @@ const { authenticateToken, requirePermission } = require('../middleware/auth');
 const optionalText = Joi.string().optional().allow(null, '');
 const optionalDate = Joi.date().optional().allow(null, '');
 
+// Validated format fields
+const whatsappNumber = Joi.string().pattern(/^\d{10}$/).optional().allow(null, '')
+  .messages({ 'string.pattern.base': 'WhatsApp number must be exactly 10 digits' });
+
+const aadharNumber = Joi.string().pattern(/^\d{12}$/).optional().allow(null, '')
+  .messages({ 'string.pattern.base': 'Aadhar number must be exactly 12 digits' });
+
+const panNumber = Joi.string().pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i).optional().allow(null, '')
+  .messages({ 'string.pattern.base': 'Invalid PAN number format (e.g. ABCDE1234F)' });
+
+const gstNumber = Joi.string().optional().allow(null, '');
+
 const contractorFields = {
   sube_title: optionalText,
   sube_first_name: optionalText,
   sube_father_husband_name: optionalText,
   sube_last_name: optionalText,
-  sube_whatsapp_number: optionalText,
+  sube_whatsapp_number: whatsappNumber,
   sube_username: optionalText,
   sube_birth_place: optionalText,
   sube_birth_date: optionalDate,
   sube_taluka: optionalText,
-  sube_aadhar_number: optionalText,
-  sube_pan_number: optionalText,
-  sube_gst_number: optionalText,
+  sube_aadhar_number: aadharNumber,
+  sube_pan_number: panNumber,
+  sube_gst_number: gstNumber,
   sube_current_address: optionalText,
   sube_technical_qualification: optionalText,
   sube_trade: optionalText,
@@ -47,10 +59,10 @@ const contractorFields = {
   majur_other_department_classification: optionalText,
   majur_member_in_other_society: optionalText,
   majur_chairman_name: optionalText,
-  majur_chairman_whatsapp: optionalText,
-  majur_chairman_aadhar: optionalText,
-  majur_society_pan: optionalText,
-  majur_society_gst: optionalText,
+  majur_chairman_whatsapp: whatsappNumber,
+  majur_chairman_aadhar: aadharNumber,
+  majur_society_pan: panNumber,
+  majur_society_gst: gstNumber,
   majur_chairman_address: optionalText
 };
 
@@ -74,6 +86,16 @@ router.get('/',
   asyncHandler(async (req, res) => {
     const contractors = await contractorService.getAll(req.query);
     return ApiResponse.success(res, contractors, 'Contractor list retrieved successfully');
+  })
+);
+
+// Get contractor stats — MUST be before /:id to avoid "stats" being matched as an id
+router.get('/stats/summary',
+  authenticateToken,
+  requirePermission('contractor.view'),
+  asyncHandler(async (req, res) => {
+    const stats = await contractorService.getStats();
+    return ApiResponse.success(res, stats, 'Contractor stats retrieved successfully');
   })
 );
 
@@ -121,16 +143,6 @@ router.delete('/:id',
     const { id } = req.params;
     const contractor = await contractorService.softDelete(parseInt(id), req.user.user_id);
     return ApiResponse.success(res, contractor, 'Contractor deleted successfully');
-  })
-);
-
-// Get contractor stats
-router.get('/stats/summary',
-  authenticateToken,
-  requirePermission('contractor.view'),
-  asyncHandler(async (req, res) => {
-    const stats = await contractorService.getStats();
-    return ApiResponse.success(res, stats, 'Contractor stats retrieved successfully');
   })
 );
 
